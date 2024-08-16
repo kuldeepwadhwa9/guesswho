@@ -16,6 +16,7 @@ object GuessWhoGame extends App {
   def gameLoop(remainingCharacters: List[Character]): Unit = {
     if (remainingCharacters.size > 1) {
 
+      println(s"\nRemaining characters: ${remainingCharacters.map(_.name).mkString(", ")}")
       println("\nEnter an attribute for example, '(hat, glasses, gender)' to guess the character:")
 
       val question: String = readLine()
@@ -32,14 +33,12 @@ object GuessWhoGame extends App {
         val genderQuestion: String = readLine()
         println(s"Raw input: $genderQuestion")
         val answer: Boolean = if (genderQuestion.contains("Male")) true else false
-        println("------------- gender" + answer)
         GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "gender", answer)
       }
       else {
         println("Question not recognized. Please ask about 'hat', 'glasses', or 'gender'.")
         remainingCharacters
       }
-      println(s"\nRemaining characters: ${remainingCharacters.map(_.name).mkString(", ")}")
       gameLoop(updatedCharacters)
     }
     else
