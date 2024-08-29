@@ -4,15 +4,15 @@ import org.scalatest.wordspec.AnyWordSpec
 class GameLogicSpec extends AnyWordSpec with Matchers {
 
   val characters: List[Character] = List(
-    Character("Amu", HairColour.Black, true, false, "Female"),
-    Character("David", HairColour.Blonde, false, true, "Male"),
-    Character("Leo", HairColour.Gray, false, false, "Male"),
-    Character("Gabe", HairColour.Black, false, true, "Male")
+    Character("Amu", HairColour.Black, glasses = true, hat = false, Gender.Female),
+    Character("David", HairColour.Blonde, glasses = false, hat = true, Gender.Male),
+    Character("Leo", HairColour.Gray, glasses = false, hat = false, Gender.Male),
+    Character("Gabe", HairColour.Black, glasses = false, hat = true, Gender.Male)
   )
 
 "GameLogic" should {
   "select the characters based on yes/no question" in {
-    val remainingCharacters = GameLogic.filterCharacterBasedOnAttributes(characters, "hat", true)
+    val remainingCharacters = GameLogic.filterCharacterBasedOnAttributes(characters, "hat", answer = true)
     remainingCharacters should have size 2
     remainingCharacters.head.name shouldBe "David"
     remainingCharacters(1).name shouldBe "Gabe"
@@ -27,9 +27,11 @@ class GameLogicSpec extends AnyWordSpec with Matchers {
 
   "select characters based on attributes" in {
 
-    val selectCharacterByAttribute = GameLogic.filterCharacterBasedOnAttributes(characters, "hat", true)
+    val selectCharacterByAttribute = GameLogic.filterCharacterBasedOnAttributes(characters, "hat", answer = true)
 
-    selectCharacterByAttribute should equal(List(Character("David", HairColour.Blonde, false, true, "Male"), Character("Gabe", HairColour.Black, false, true, "Male")))
+    selectCharacterByAttribute should equal(List(
+      Character("David", HairColour.Blonde, glasses = false, hat = true, Gender.Male),
+      Character("Gabe", HairColour.Black, glasses = false, hat = true, Gender.Male)))
   }
 }
 }

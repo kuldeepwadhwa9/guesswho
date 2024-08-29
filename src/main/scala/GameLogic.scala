@@ -5,7 +5,7 @@ object GameLogic {
     attributes match {
       case "glasses" => character.filter(_.glasses == answer)
       case "hat" => character.filter(_.hat == answer)
-      case "gender" => character.filter(_.gender == (if (answer) "Male" else "Female"))
+      case "gender" => character.filter(_.gender == (if (answer) Gender.Male else Gender.Female))
       case _ => character
     }
   }
