@@ -33,5 +33,15 @@ class GameLogicSpec extends AnyWordSpec with Matchers {
       Character("David", HairColour.Blonde, glasses = false, hat = true, Gender.Male),
       Character("Gabe", HairColour.Black, glasses = false, hat = true, Gender.Male)))
   }
+
+  "filterOut the name of the character" in {
+    val filterOutName = GameLogic.filterOutIncorrectlyGuessedCharacterByName(characters, "Leo")
+
+    filterOutName should equal(List(
+      Character("Amu", HairColour.Black, glasses = true, hat = false, Gender.Female),
+      Character("David", HairColour.Blonde, glasses = false, hat = true, Gender.Male),
+      Character("Gabe", HairColour.Black, glasses = false, hat = true, Gender.Male)
+    ))
+  }
 }
 }

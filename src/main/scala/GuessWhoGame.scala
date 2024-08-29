@@ -7,36 +7,43 @@ object GuessWhoGame extends App {
   private val chosenCharacter = GameLogic.chooseCharacter(characters)
 
   println("Welcome to Guess Who Game")
-  println("Guess the character by asking questions based on 'hat, glasses, gender'")
+  println("Guess the character by asking questions based on 'hat, glasses, gender', or guess the name directly.")
   println("Available characters:")
   characters.map(_.name).foreach(println)
-
 
   @tailrec
   private def gameLoop(remainingCharacters: List[Character]): Unit = {
     if (remainingCharacters.size > 1) {
-      println("\nRemaining characters: " + remainingCharacters.map(_.name).mkString(", "))
-      println("Enter an attribute to guess the character (options: 'hat', 'glasses', 'gender'):")
 
-      val question = readLine().trim.toLowerCase
-      val updatedCharacters = question match {
+      println("\nRemaining characters: " + remainingCharacters.map(_.name).mkString(", "))
+      println("Enter 'hat', 'glasses', 'gender' to ask about attributes, or type 'name' to guess the character's name:")
+
+      val input = readLine().trim.toLowerCase
+
+    input match {
+        case "name" =>
+          val guessedName = askForCharacterGuessByName()
+          if (guessedName.equalsIgnoreCase(chosenCharacter.name)){
+            println(s"Congratulations You guessed correctly. The character is ${chosenCharacter.name}.")
+          } else {
+            println(s"Sorry :(, $guessedName is not the correct character. Keep playing!")
+            gameLoop(GameLogic.filterOutIncorrectlyGuessedCharacterByName(remainingCharacters, guessedName))
+          }
         case "hat" =>
           val answer = askYesNoQuestion("Does the character wear a hat?")
-          GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "hat", answer)
+          gameLoop(GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "hat", answer))
         case "glasses" =>
           val answer = askYesNoQuestion("Does the character wear glasses?")
-          GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "glasses", answer)
+          gameLoop(GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "glasses", answer))
         case "gender" =>
           val gender = askGenderQuestion("Is the character male or female?")
-          GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "gender", gender == "male")
+          gameLoop(GameLogic.filterCharacterBasedOnAttributes(remainingCharacters, "gender", gender == "male"))
         case _ =>
-          println("Unrecognized attribute. Please try again.")
-          remainingCharacters
+          println("Unrecognized input. Please try again.")
+          gameLoop(remainingCharacters)
       }
-
-      gameLoop(updatedCharacters)
     } else {
-      println(s"\nYour guess: ${remainingCharacters.head.name}")
+      println(s"\nYour input: ${remainingCharacters.head.name}")
       if (remainingCharacters.head == chosenCharacter) {
         println("Congratulations! Your guess was correct.")
       } else {
@@ -55,6 +62,10 @@ object GuessWhoGame extends App {
     readLine().trim.toLowerCase
   }
 
+  private def askForCharacterGuessByName(): String = {
+    println("Enter your guess for the character's name:")
+    readLine().trim
+  }
 
   gameLoop(characters)
 }

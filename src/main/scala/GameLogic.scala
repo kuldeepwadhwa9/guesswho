@@ -10,6 +10,10 @@ object GameLogic {
     }
   }
 
+  def filterOutIncorrectlyGuessedCharacterByName(character: List[Character], name: String): List[Character] = {
+    character.filterNot(_.name.equalsIgnoreCase(name))
+  }
+
   def chooseCharacter(character: List[Character]): Character =
     Random.shuffle(character).head
 

@@ -20,3 +20,4 @@ case class Character (
     glasses: Boolean,
     hat: Boolean,
     gender: Gender)
+
